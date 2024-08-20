@@ -1,0 +1,38 @@
+{
+  "name": "bienesraices_mvc",
+  "version": "1.0.0",
+  "description": "Proyecto de bienes raices en node.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./app.js",
+    "server": "nodemon ./app.js",
+    "css": "postcss public/css/tailwind.css -o public/css/app.css --watch"
+  },
+  "keywords": [
+    "MVC",
+    "pug",
+    "Tailwind",
+    "MySql",
+    "Sequelize"
+  ],
+  "author": "Ramses Valenzuela",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "mysql2": "^3.1.2",
+    "nodemailer": "^6.9.14",
+    "pug": "^3.0.2",
+    "sequelize": "^6.29.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "nodemon": "^3.1.4",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.2.4"
+  }
+}

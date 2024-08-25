@@ -84,6 +84,14 @@ const registrar = async (req, res) =>{
 const confirmar = (req, res) => {
     
     const {token} = req.params
+
+    console.log(token)
+
+    //verificar si el token es valido 
+     
+
+    //confirmar cuenta
+    
 }
 
 const formularioOlvidePassword = (req, res) =>{

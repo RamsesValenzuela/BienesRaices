@@ -20,7 +20,7 @@ const regiterEmail = async (datos) =>{
         html: `
         <p> hola ${user}, comprueba tu cuenta </p>
         <p>Tu cuenta ya esta lista, solo debes de confirmaela en el siguiente enlace</p>
-        <a href="">Confirme su cuenta</a>
+        <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 4000}/auth/confirmar/${token}">Confirme su cuenta</a>
 
 
         <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>

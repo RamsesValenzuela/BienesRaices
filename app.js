@@ -1,4 +1,7 @@
 import express from 'express';
+import csurf from 'csurf'; 
+import cookieParser from 'cookie-parser';
+import bodyparser from 'body-parser'
 import usuarioRoutes from './routes/usuarioRoutes.js'
 import db from './config/db.js';
 
@@ -6,8 +9,21 @@ import db from './config/db.js';
 const app = express();
 
 
+//habilitar bodyparser
+app.use(bodyparser.urlencoded({extended:true}))
+app.use(bodyparser.json())
+
 //Habilitar lectura de datos
 app.use(express.urlencoded({ extended: true}));
+
+
+//habiliatar cookie parser
+app.use(cookieParser())
+
+//habilitar CSRF
+app.use(csurf({cookie:true}))
+
+
 
 try{
     await db.authenticate();

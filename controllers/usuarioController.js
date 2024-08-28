@@ -12,8 +12,10 @@ const formularioLogin = (req, res) =>{
 
 
 const formularioRegistro = (req, res) =>{
+    console.log(req.csrfToken())
     res.render('auth/registro', {
-        pagina: 'Crear cuenta'
+        pagina: 'Crear cuenta',
+        csrfToken: req.csrfToken()
     })
 }
 
@@ -33,6 +35,7 @@ const registrar = async (req, res) =>{
         //errores
         return res.render('auth/registro', {
             pagina: 'Crear cuenta',
+            csrfToken: req.csrfToken(),
             errores: resultado.array(),
             usuario:{
                 nombre: req.body.nombre,
@@ -50,6 +53,7 @@ const registrar = async (req, res) =>{
     if(userExists){
         return res.render('auth/registro', {
             pagina: 'Crear cuenta',
+            csrfToken: req.csrfToken(),
             errores: [{msg:'El usuario ya esta registrado'}],
             usuario:{
                 nombre: req.body.nombre,
@@ -81,7 +85,7 @@ const registrar = async (req, res) =>{
 
 }
 
-const confirmar = (req, res) => {
+const confirmar = async (req, res) => {
     
     const {token} = req.params
 
@@ -89,15 +93,57 @@ const confirmar = (req, res) => {
 
     //verificar si el token es valido 
      
+    const user = await  Usuario.findOne({where: {token}})
+
+    console.log(user)
+
+    if(!user){
+        return res.render('auth/accountConfirm',{
+            pagina: 'Error al confirmar cuenta',
+            mensaje:'Hubo un error al confirmar tu cuenta',
+            error:true
+        })
+    }
 
     //confirmar cuenta
-    
-}
+    user.token = null;
+    user.confirmado = true
+
+    await user.save();
+        return res.render('auth/accountConfirm',{
+        pagina: 'Cuenta Confirmada',
+        mensaje:'La cuenta se confirmo correctamente',
+        error:false
+    })
+
+} 
 
 const formularioOlvidePassword = (req, res) =>{
     res.render('auth/olvide-password', {
-        pagina: 'Recupera tu acceso a bienes raices'
+        pagina: 'Recupera tu acceso a bienes raices',
+        csrfToken: req.csrfToken(),
     })
+}
+
+const resetPassword = async (req, res) =>{
+
+    //validacion
+    await check('email').isEmail().withMessage('Eso no es un email').run(req)
+
+    let resultado = validationResult(req)
+    
+    //verificar que el resultado este vacio
+    if(!resultado.isEmpty()){
+        //errores
+        return res.render('auth/olvide-password', {
+            pagina: 'Recupera tu acceso a bienes raices',
+            csrfToken: req.csrfToken(),
+            errores: resultado.array(),
+        })
+    }
+
+    //buscar al usuario si existe en la base de datos
+    
 }
 
 export{
@@ -105,5 +151,6 @@ export{
     formularioRegistro,
     formularioOlvidePassword,
     registrar,
-    confirmar
+    confirmar,
+    resetPassword
 }

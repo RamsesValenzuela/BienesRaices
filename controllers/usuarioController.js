@@ -178,7 +178,7 @@ const resetPassword = async (req, res) => {
 
 }
 
-const tokenValidator = async (res, req) =>{
+const tokenValidator = async (res, req) =>{ 
 
     const {token} = req.params
     
@@ -193,7 +193,7 @@ const tokenValidator = async (res, req) =>{
     }
 
     //mostrar formulario para modificar password
-    res.render('auth/reset_password',{
+    res.render('auth/resetPassword',{
         pagina: 'restablece tu password',
         
     })

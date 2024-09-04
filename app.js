@@ -7,7 +7,7 @@ import db from './config/db.js';
 
 
 const app = express();
-
+app.use(express.json())
 
 //habilitar bodyparser
 app.use(bodyparser.urlencoded({extended:true}))

@@ -1,10 +1,12 @@
 import express, { Router } from "express";
 import { formularioLogin, formularioOlvidePassword, formularioRegistro, registrar, 
-    confirmar, resetPassword, tokenValidator, newPassword} from "../controllers/usuarioController.js";
+    confirmar, resetPassword, tokenValidator, newPassword, authenticate} from "../controllers/usuarioController.js";
 
 const routes = express.Router()
 //routing
 routes.get('/login', formularioLogin);
+routes.post('/login', authenticate);
+
 
 routes.get('/registro', formularioRegistro);
 routes.post('/registro', registrar);

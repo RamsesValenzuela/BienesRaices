@@ -48,8 +48,8 @@ const passwordReset = async (datos) =>{
       text: 'Reestablesca su contraseña en BienesRaices.com',
       html: `
       <p> Hola ${user}, Haz solicitado reestablecer tu password en BienesRaices.com </p>
-      <p>Sigue el siguiente enlace para generar un nuevo p  assword
-      <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 4000}/auth/olvide-password/${token}">Reestablecer Password</a> </p>
+      <p>Sigue el siguiente enlace para generar un nuevo password </p>
+      <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 4000}/auth/olvide-password/${token}">Reestablecer Password</a> 
 
 
       <p>Si tu no solicitaste el cambio de password, puedes ignorar el mensaje</p>

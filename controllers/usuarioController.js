@@ -1,15 +1,79 @@
 import { check, validationResult } from 'express-validator';
 import Usuario from '../models/usuario.js';
-import { generateId } from '../helper/tokes.js';
+import jwt from 'jsonwebtoken'
+import { generateId, generateJWT } from '../helper/tokens.js';
 import { regiterEmail, passwordReset } from '../helper/emails.js';
 
 const formularioLogin = (req, res) => {
     res.render('auth/login', {
-        pagina: 'Iniciar Sesión'
+        pagina: 'Iniciar Sesión',
+        csrfToken: req.csrfToken()
     })
 }
 
+const authenticate = async (req, res) =>{
+    //validacion
+    await check('email').isEmail().withMessage('Eso no es un email').run(req)
+    await check('password').notEmpty().withMessage('El password es obligatorio').run(req)
 
+    //verificar que el resultado este vacio
+    let resultado = validationResult(req)
+
+    //verificar que el resultado este vacio
+    if (!resultado.isEmpty()) {
+        //errores
+        
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesión',
+            csrfToken: req.csrfToken(),
+            errores: resultado.array(),
+        })
+    }
+
+    //Comprobar si el usuario existe
+    const {email, password} = req.body
+
+    const user =  await Usuario.findOne({where :{email}})
+
+    if(!user){
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesión',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: "El usuario no existe"}],
+        })
+    }
+
+    //Comprobar si el usuario esta comprobado
+    if(!user.confirmado){
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesión',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: "El usuario no ha confirmado su cuenta"}],
+        })
+    }
+
+    //revisar el password
+    if(!user.passwordValidator(password)){
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesión',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: "El password es incorrecto"}],
+        })
+    }
+
+    //autenticar al usuario
+
+    const token = generateJWT({id: user.id, nombre:user.nombre})
+    console.log(token)
+
+    //almacenar en un cookie
+    return res.cookie('_token', token, {
+        httpOnly: true,
+        secure:true,
+        sameSite:true,
+    }).redirect('/mis_propiedades')
+
+}
 
 const formularioRegistro = (req, res) => {
     console.log(req.csrfToken())
@@ -18,6 +82,7 @@ const formularioRegistro = (req, res) => {
         csrfToken: req.csrfToken()
     })
 }
+
 
 const registrar = async (req, res) => {
 
@@ -85,6 +150,7 @@ const registrar = async (req, res) => {
 
 }
 
+
 const confirmar = async (req, res) => {
 
     const { token } = req.params
@@ -118,12 +184,14 @@ const confirmar = async (req, res) => {
 
 }
 
+
 const formularioOlvidePassword = (req, res) => {
     res.render('auth/olvide-password', {
         pagina: 'Recupera tu acceso a bienes raices',
         csrfToken: req.csrfToken(),
     })
 }
+
 
 const resetPassword = async (req, res) => {
 
@@ -178,10 +246,12 @@ const resetPassword = async (req, res) => {
 
 }
 
+
 const tokenValidator = async (res, req) =>{ 
 
-    const {token} = req.params
-    
+    console.log(req.params)
+    const {token} = req.params;
+
     const user = await Usuario.findOne({where: {token}})
 
     if(!user){
@@ -205,6 +275,9 @@ const newPassword = (res, req) =>{
 }
 
 
+
+
+
 export {
     formularioLogin,
     formularioRegistro,
@@ -213,5 +286,6 @@ export {
     confirmar,
     resetPassword,
     tokenValidator,
-    newPassword
+    newPassword,
+    authenticate
 }

@@ -1,5 +1,5 @@
 import { check, validationResult } from 'express-validator';
-import Usuario from '../models/usuario.js';
+import Usuario from '../models/Usuario.js';
 import jwt from 'jsonwebtoken'
 import { generateId, generateJWT } from '../helper/tokens.js';
 import { regiterEmail, passwordReset } from '../helper/emails.js';

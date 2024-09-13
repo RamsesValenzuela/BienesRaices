@@ -16,7 +16,7 @@ const importData = async() =>{
             Category.bulkCreate(categorias),
             Price.bulkCreate(prices)
         ])
-        
+
         console.log('Datos importados correctamente')
         process.exit()
 
@@ -27,6 +27,21 @@ const importData = async() =>{
     }
 }
 
+const deleteData = async()=>{
+    try {
+        await db.sync({force:true})
+        console.log("Datos eliminados correctamente")
+        process.exit();
+    } catch (error) {
+        console.log(error)
+        process.exit(1);
+    }
+}
+
 if(process.argv[2] === "-i"){
     importData() 
+}
+
+if(process.argv[2] === "-e"){
+    deleteData();
 }

@@ -9,7 +9,8 @@
     "server": "nodemon ./app.js",
     "css": "postcss public/css/tailwind.css -o public/css/app.css --watch",
     "js": "webpack --watch",
-    "dev": "concurrently \"npm run css\" \"npm run js\""
+    "dev": "concurrently \"npm run css\" \"npm run js\"",
+    "db:import": "node ./seed/Seeder.js -i"
   },
   "keywords": [
     "MVC",
@@ -23,12 +24,12 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bienesraices_mvc": "file:",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.6",
     "csurf": "^1.10.0",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "express": "^4.21.0",
     "express-validator": "^6.15.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.1.2",

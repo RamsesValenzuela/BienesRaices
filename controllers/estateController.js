@@ -1,7 +1,7 @@
 import db from '../config/db.js'
 import Price from '../models/Price.js'
 import Category from '../models/Category.js'
-import { promises } from 'nodemailer/lib/xoauth2'
+
 
 
 const admin = (req, res) =>{
@@ -14,7 +14,7 @@ const admin = (req, res) =>{
 const crear =  async (req, res) =>{
 
     //consultar modelo de Precio y Categorias
-    const [categorys, prices] = await promises.all([
+    const [categorys, prices] = await Promise.all([
         Category.findAll(),
         Price.findAll(),
     ])

@@ -28,8 +28,13 @@ const crear =  async (req, res) =>{
     })
 }
 
+const saveEstate = async(req, res) =>{
+
+}
+
 
 export{
     admin,
-    crear
+    crear,
+    saveEstate
 }

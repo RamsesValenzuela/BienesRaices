@@ -247,7 +247,7 @@ const resetPassword = async (req, res) => {
 }
 
 
-const tokenValidator = async (res, req) =>{ 
+const tokenValidator = async (req, res) =>{ 
 
     console.log(req.params)
     const {token} = req.params;

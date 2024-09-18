@@ -1,10 +1,11 @@
 import express from 'express'
 import { body } from 'express-validator'
 import {admin, crear, saveEstate} from '../controllers/estateController.js'
-
+import protectPath from '../middleware/ProtectPath.js'
+ 
 const router = express.Router()
 
-router.get('/mis_propiedades', admin)
+router.get('/mis_propiedades', protectPath, admin)
 router.get('/propiedades/crear', crear)
 router.post('/propiedades/crear', 
     body('title').notEmpty().withMessage('El Titulo Del Anuncio Es Obligatorio'),

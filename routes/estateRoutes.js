@@ -7,7 +7,23 @@ const router = express.Router()
 router.get('/mis_propiedades', admin)
 router.get('/propiedades/crear', crear)
 router.post('/propiedades/crear', 
-    body('titulo').notEmpty().withMessage('El Titulo Del Anuncio Es Obligatorio'),
+    body('title').notEmpty().withMessage('El Titulo Del Anuncio Es Obligatorio'),
+    body('description')
+        .notEmpty().withMessage('La Descripción Del Anuncio Es Obligatorio')
+        .isLength({max: 250}).withMessage('La Description es demasiado larga'),
+    body('category').isNumeric().withMessage('Selecciona una categoria'),
+    body('price').isNumeric().withMessage('Selecciona un rango de precios'),
+    body('roomQty').isNumeric().withMessage('Selecciona las habitaciones'),
+    body('garage').isNumeric().withMessage('Selecciona el numero de estacionamiento'),
+    body('wc').isNumeric().withMessage('Selecciona el numero de baños'),
+    body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
+    
+
+
+
+
+
+
     saveEstate)
 
 

@@ -1,8 +1,6 @@
 import db from '../config/db.js'
 import { validationResult } from 'express-validator'
-import Price from '../models/Price.js'
-import Category from '../models/Category.js'
-
+import {Price, Category, Estate } from '../models/index.js'
 
 
 const admin = (req, res) =>{
@@ -25,7 +23,8 @@ const crear =  async (req, res) =>{
         barra: true,
         csrfToken: req.csrfToken(),
         categorys,
-        prices
+        prices,
+        datos: []
 
     })
 }
@@ -46,13 +45,39 @@ const saveEstate = async(req, res) =>{
 
         return  res.render('estate/create', {
             pagina: 'Crear Propiedad',
-            barra: true,
+            barra: true, 
+            csrfToken: req.csrfToken(),
             categorys,
             prices,
-            errores: result.array()
+            errores: result.array(),
+            datos: req.body
     
         })
     }
+
+    //crear registro
+
+    const {title, description, roomQty, garage, wc, street, lat, lng, category:categoryId, price:priceId, } = req.body
+    
+
+    try {
+        const savePropiety = await Estate.create({
+           title, 
+           description,
+           roomQty,
+           garage,
+           wc, 
+           street,
+           lat,
+           lng, 
+           priceId,
+           categoryId
+
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 

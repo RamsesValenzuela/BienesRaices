@@ -1,6 +1,6 @@
 (function() {
-    const lat = 27.4827347;
-    const lng = -109.9304027;
+    const lat = document.querySelector('#lat').value || 27.4827347;
+    const lng = document.querySelector('#lng').value || -109.9304027;
     const mapa = L.map('mapa').setView([lat, lng ], 14);
     let marker;
 
@@ -30,10 +30,10 @@
             marker.bindPopup(result.address.LongLabel)
 
             //llenar los campos ocultos
-            document.querySelector('.calle').textContent = result?.address?.Address ?? '';
-            document.querySelector('#street').textContent = result?.address?.Address ?? '';
-            document.querySelector('#lat').textContent = result?.latlng?.lat ?? ''
-            document.querySelector('#lng').textContent = result?.latlng?.lng ?? ''
+            document.querySelector('.calle').value = result?.address?.Address ?? '';
+            document.querySelector('#street').value = result?.address?.Address ?? '';
+            document.querySelector('#lat').value = result?.latlng?.lat ?? ''
+            document.querySelector('#lng').value = result?.latlng?.lng ?? ''
         })
     })
 })()

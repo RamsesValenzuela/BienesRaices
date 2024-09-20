@@ -7,7 +7,8 @@ const router = express.Router()
 
 router.get('/mis_propiedades', protectPath, admin)
 router.get('/propiedades/crear', crear)
-router.post('/propiedades/crear', 
+router.post('/propiedades/crear',
+    protectPath, 
     body('title').notEmpty().withMessage('El Titulo Del Anuncio Es Obligatorio'),
     body('description')
         .notEmpty().withMessage('La Descripción Del Anuncio Es Obligatorio')

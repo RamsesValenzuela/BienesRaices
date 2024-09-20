@@ -4,10 +4,10 @@ import {generateId} from '../helper/tokens.js'
  
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, '/public/uploads')
+        cb(null, './public/uploads/')
     },
     filename: function(req, file, cb) {
-        cb(null, generateId + path.extname(file.originalname))
+        cb(null, generateId() + path.extname(file.originalname))
     }
 })
 

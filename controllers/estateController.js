@@ -112,7 +112,6 @@ const addImage = async  (req,res) =>{
    }
 
 
-   console.log(req.user)
    
     res.render('estate/addImage', {
         pagina: `Agregar Imagen ${prop.title}`,
@@ -121,9 +120,53 @@ const addImage = async  (req,res) =>{
     })
 }
 
+const storageImage = async (req, res, next) =>{
+  
+    const {id} = req.params
+
+    //validar que la propiedad exista
+ 
+    const prop = await Estate.findByPk(id)
+ 
+    if(!prop){
+     return res.redirect('/mis_propiedades')
+    }
+ 
+    //validar que la propiedad no este publicada 
+    if(prop.published){
+     return res.redirect('/mis_propiedades')
+    }
+ 
+    //validar que la propiedad le pertenece a quien visita esta pagina
+    if(req.user.id.toString() !== prop.UsuarioId.toString()){
+         res.redirect('/mis_propiedades')
+    }
+
+
+    try {
+        
+        console.log(req.file.filename)
+        
+        
+        //almacenar la imagen y publicar propiedad
+        prop.imagen = req.file.filename
+
+        prop.published = 1
+
+        await prop.save()
+
+        next()
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 export{
     admin,
     crear,
     saveEstate,
-    addImage
+    addImage,
+    storageImage
 }

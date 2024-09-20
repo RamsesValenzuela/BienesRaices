@@ -1,6 +1,6 @@
 import express from 'express'
 import { body } from 'express-validator'
-import {admin, crear, saveEstate} from '../controllers/estateController.js'
+import {admin, crear, saveEstate, addImage} from '../controllers/estateController.js'
 import protectPath from '../middleware/ProtectPath.js'
  
 const router = express.Router()
@@ -19,14 +19,9 @@ router.post('/propiedades/crear',
     body('garage').isNumeric().withMessage('Selecciona el numero de estacionamiento'),
     body('wc').isNumeric().withMessage('Selecciona el numero de baños'),
     body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
-    
-
-
-
-
-
-
     saveEstate)
+
+router.get('/propiedades/agregar-imagen/:id', addImage)
 
 
 export default router

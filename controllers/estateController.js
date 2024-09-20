@@ -6,7 +6,6 @@ import {Price, Category, Estate } from '../models/index.js'
 const admin = (req, res) =>{
     res.render('estate/admin',{
         pagina: 'Mis Propiedades',
-        barra: true
     })
 }
 
@@ -45,7 +44,6 @@ const saveEstate = async(req, res) =>{
 
         return  res.render('estate/create', {
             pagina: 'Crear Propiedad',
-            barra: true, 
             csrfToken: req.csrfToken(),
             categorys,
             prices,
@@ -91,8 +89,15 @@ const saveEstate = async(req, res) =>{
 }
 
 
+const addImage = async  (req,res) =>{
+    res.render('estate/addImage', {
+        pagina: 'Agregar Imagen',
+    })
+}
+
 export{
     admin,
     crear,
-    saveEstate
+    saveEstate,
+    addImage
 }

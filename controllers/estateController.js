@@ -59,6 +59,9 @@ const saveEstate = async(req, res) =>{
 
     const {title, description, roomQty, garage, wc, street, lat, lng, category:categoryId, price:priceId, } = req.body
     
+    console.log(req.user)
+
+    const {id: UsuarioId} = req.user
 
     try {
         const savePropiety = await Estate.create({
@@ -71,9 +74,16 @@ const saveEstate = async(req, res) =>{
            lat,
            lng, 
            priceId,
-           categoryId
+           categoryId,
+           UsuarioId,
+           imagen: ''
 
         })
+
+        const  {id} = savePropiety
+
+            res.redirect('/propiedades/agregar-imagen/${id}')
+
     } catch (error) {
         console.log(error)
     }

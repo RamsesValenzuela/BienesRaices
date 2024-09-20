@@ -90,8 +90,34 @@ const saveEstate = async(req, res) =>{
 
 
 const addImage = async  (req,res) =>{
+   
+    const {id} = req.params
+
+   //validar que la propiedad exista
+
+   const prop = await Estate.findByPk(id)
+
+   if(!prop){
+    return res.redirect('/mis_propiedades')
+   }
+
+   //validar que la propiedad no este publicada 
+   if(prop.published){
+    return res.redirect('/mis_propiedades')
+   }
+
+   //validar que la propiedad le pertenece a quien visita esta pagina
+   if(req.user.id.toString() !== prop.UsuarioId.toString()){
+        res.redirect('/mis_propiedades')
+   }
+
+
+   console.log(req.user)
+   
     res.render('estate/addImage', {
-        pagina: 'Agregar Imagen',
+        pagina: `Agregar Imagen ${prop.title}`,
+        csrfToken: req.csrfToken(),
+        prop
     })
 }
 

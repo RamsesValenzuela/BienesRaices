@@ -1,9 +1,11 @@
 import path from 'path'
 
+
 export default {
     mode: 'development',
     entry : {
-        maps: './src/js/maps.js'
+        maps: './src/js/maps.js',
+        addImage: './src/js/addImage.js'
     },
     output: {
         filename: '[name].js',

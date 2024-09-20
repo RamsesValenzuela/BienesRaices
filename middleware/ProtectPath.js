@@ -19,11 +19,11 @@ const protectPath = async (req, res, next) =>{
         
        //Almacenar el usuario al Req
        if(user){
-            req.usuario = user
+            req.user = user
        }else{
             return res.redirect('/auth/login')
        }
-       
+
        return next()
 
     } catch (error) {

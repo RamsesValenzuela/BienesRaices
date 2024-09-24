@@ -3,9 +3,24 @@ import { validationResult } from 'express-validator'
 import {Price, Category, Estate } from '../models/index.js'
 
 
-const admin = (req, res) =>{
+const admin = async (req, res) =>{
+
+    const {id} = req.user
+
+    const propiedades = await Estate.findAll({
+        where:{
+            UsuarioId : id
+        },
+        include : [
+            {model: Category, as:'category'},
+            {model: Price, as: 'price'}
+        ]
+    })
+
     res.render('estate/admin',{
         pagina: 'Mis Propiedades',
+        propiedades,
+
     })
 }
 

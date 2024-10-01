@@ -200,14 +200,57 @@ const editPropiety = async (req, res) => {
     ])
 
     res.render('estate/update', {
-        pagina: 'Editar Propiedad',
+        pagina: `Editar Propiedad: ${propiedad.title}`,
         barra: true,
         csrfToken: req.csrfToken(),
         categorys,
         prices,
-        datos: []
+        datos: propiedad
 
     })
+}
+
+
+const saveUpdate = async (req, res) =>{
+        
+    let result = validationResult(req)
+
+    if(!result.isEmpty()){
+
+        const [categorys, prices] = await Promise.all([
+            Category.findAll(),
+            Price.findAll(),
+        ])
+
+        return res.render('estate/update', {
+            pagina: `Editar Propiedad`,
+            barra: true,
+            csrfToken: req.csrfToken(),
+            categorys,
+            prices,
+            errores: result.array(),
+            datos: req.body
+        })
+    }
+
+    const {id} = req.params
+
+    const propiedad= await Estate.findByPk(id)
+
+    if(!propiedad){
+        return res.redirect('/mis_propiedades')
+    }
+    
+    if(propiedad.UsuarioId.toString() !== req.user.id.toString()){
+        return res.redirect('/mis_propiedades')
+    }
+
+    try {
+        
+    } catch (error) {
+        console.log(error)
+    }
+    
 }
 
 export{
@@ -216,5 +259,6 @@ export{
     saveEstate,
     addImage,
     storageImage,
-    editPropiety
+    editPropiety,
+    saveUpdate
 }

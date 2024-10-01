@@ -246,6 +246,24 @@ const saveUpdate = async (req, res) =>{
     }
 
     try {
+
+    const {title, description, roomQty, garage, wc, street, lat, lng, category:categoryId, price:priceId, } = req.body
+        propiedad.set({
+            title,
+            description,
+            roomQty,
+            garage,
+            wc,
+            street,
+            lat,
+            lng,
+            categoryId,
+            priceId
+        })
+
+        await propiedad.save()
+
+        res.redirect('mis_propiedades')
         
     } catch (error) {
         console.log(error)

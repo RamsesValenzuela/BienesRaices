@@ -178,10 +178,43 @@ const storageImage = async (req, res, next) =>{
 
 }
 
+const editPropiety = async (req, res) => {
+    
+    const {id} = req.params
+
+    const propiedad= await Estate.findByPk(id)
+
+    if(!propiedad){
+        return res.redirect('/mis_propiedades')
+    }
+    
+    //revisar que este autorizado la persona que visita la url
+    if(propiedad.UsuarioId.toString() !== req.user.id.toString()){
+        return res.redirect('/mis_propiedades')
+    }
+
+
+    const [categorys, prices] = await Promise.all([
+        Category.findAll(),
+        Price.findAll(),
+    ])
+
+    res.render('estate/update', {
+        pagina: 'Editar Propiedad',
+        barra: true,
+        csrfToken: req.csrfToken(),
+        categorys,
+        prices,
+        datos: []
+
+    })
+}
+
 export{
     admin,
     crear,
     saveEstate,
     addImage,
-    storageImage
+    storageImage,
+    editPropiety
 }

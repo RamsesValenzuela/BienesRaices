@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { body } from 'express-validator'
-import {admin, crear, saveEstate, addImage, storageImage, editPropiety} from '../controllers/estateController.js'
+import {admin, crear, saveEstate, addImage, storageImage, editPropiety, saveUpdate} from '../controllers/estateController.js'
 import protectPath from '../middleware/ProtectPath.js'
 import upload from '../middleware/UploadImage.js'
  
@@ -37,5 +37,18 @@ router.get('/propiedades/editar/:id',
     editPropiety
 )
 
+router.post('/propiedades/editar/:id',
+    protectPath, 
+    body('title').notEmpty().withMessage('El Titulo Del Anuncio Es Obligatorio'),
+    body('description')
+        .notEmpty().withMessage('La Descripción Del Anuncio Es Obligatorio')
+        .isLength({max: 250}).withMessage('La Description es demasiado larga'),
+    body('category').isNumeric().withMessage('Selecciona una categoria'),
+    body('price').isNumeric().withMessage('Selecciona un rango de precios'),
+    body('roomQty').isNumeric().withMessage('Selecciona las habitaciones'),
+    body('garage').isNumeric().withMessage('Selecciona el numero de estacionamiento'),
+    body('wc').isNumeric().withMessage('Selecciona el numero de baños'),
+    body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
+    saveUpdate)
 
 export default router

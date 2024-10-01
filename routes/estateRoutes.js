@@ -1,6 +1,6 @@
-import express from 'express'
+import express, { Router } from 'express'
 import { body } from 'express-validator'
-import {admin, crear, saveEstate, addImage, storageImage} from '../controllers/estateController.js'
+import {admin, crear, saveEstate, addImage, storageImage, editPropiety} from '../controllers/estateController.js'
 import protectPath from '../middleware/ProtectPath.js'
 import upload from '../middleware/UploadImage.js'
  
@@ -31,5 +31,11 @@ router.post('/propiedades/agregar-imagen/:id',
     upload.single('image'),
     storageImage
 )
+
+router.get('/propiedades/editar/:id', 
+    protectPath,
+    editPropiety
+)
+
 
 export default router

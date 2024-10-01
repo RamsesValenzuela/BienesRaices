@@ -1,0 +1,97 @@
+extends ../layout/admin
+
+block style
+    link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
+block contenido
+    .py-10
+        h1.text-4xl.my-10.font-extrabold.text-center Bienes
+            span.font-normal Raices
+        h2.text-center.text-2xl-font-extrabold= pagina
+
+        if errores 
+            div(class="max-w-md mx-auto my-10")
+                each error in errores
+                    p.bg-indigo-400.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+
+        div(class="bg-white shadow py-8 px-4 rounded mx-auto max-w-2xl my-10 md:px-10")
+            form.space-y-8(method="POST" action="/propiedades/crear")
+                input(type="hidden" name="_csrf" value=csrfToken)
+                div.space-y-5 
+                    h3.text-lg.leading-6.font-medium.text-gray-900 Informacion General
+                    p.text-gray-600 Añade información sobre la propiedad en venta
+
+                    
+                    div 
+                        label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="title") Titulo de anuncio
+                        input#title.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(placeholder="Titulo Propiedad, ej. Casa en la playa " type="text" name="title" value=datos.title ? datos.title : '')
+                    
+                    div 
+                        label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="description") Descripción de la propiedad 
+                        textarea#desription.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(placeholder="Descripción de la propiedad" name="description")= datos.description ? datos.description : ''
+                                    
+                    div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
+                        
+                        div(class="md:w-1/2") 
+                            label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="category") Categoria
+                            select#category.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(name="category")
+                                option(value="") - Seleccione -
+                                each category in categorys
+                                    option(value=category.id selected= datos.category ? datos.category == category.id ? true : false : null )= category.name 
+                        
+                        div(class="md:w-1/2") 
+                            label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="price") Precio
+                            select#price.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(name="price")
+                                option(value="") - Seleccione -
+                                each price in prices
+                                    option(value=price.id selected= datos.price ? datos.price == price.id ? true : false : null)= price.name 
+
+                    div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
+                        
+                        div(class="md:w-1/3") 
+                            label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="roomQty") Habitaciones 
+                            select#roomQty.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(name="roomQty")
+                                option(value="") - Seleccione -
+                                - let nRooms = 1;
+                                    while nRooms < 10
+                                        option(value=nRooms selected= datos.roomQty ? datos.roomQty == nRooms ? true : false : null) #{nRooms++}
+                        
+                        div(class="md:w-1/3") 
+                            label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="garage") Estacionamiento
+                            select#garage.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(name="garage")
+                                option(value="") - Seleccione -
+                                - let nGarage = 1;
+                                    while nGarage < 4
+                                        option(value=nGarage selected= datos.garage ? datos.garage == nGarage ? true : false : null) #{nGarage++}
+
+                        div(class="md:w-1/3") 
+                            label.block.text-sm.uppercase.text-gray-700.mb-2.font-bold(for="wc") WC
+                            select#wc.w-full.px-3.py-2.border.border-gray-700.rounded-md.placeholder-gray-400(name="wc")
+                                option(value="") - Seleccione -
+                                - let nWc = 1;
+                                    while nWc < 6
+                                        option(value=nWc selected= datos.wc ? datos.wc == nWc ? true : false : null) #{nWc++}
+
+                    div.border-gray-200.border-t.py-5.space-y-5
+                        h3.text-lg.leading-6.font-medium.text-gray-900 Ubicación
+                        p.text-gray-600 Ubica la propiedad en el mapa                 
+                        #mapa.h-96
+
+                        div
+                            p.calle= datos.street ? datos.street : ''
+                        
+                        input(Type="hidden" name="street" id="street" value=  datos.street ? datos.street : '')
+                        input(Type="hidden" name="lat" id="lat" value= datos.lat ? datos.lat : '')
+                        input(Type="hidden" name="lng" id="lng" value= datos.lng ? datos.lng : '')
+                    
+                    input(class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase cursor-pointer" type="submit" value="Añadir Imagen")
+
+
+
+
+block scripts
+    script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+    script(src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js")
+    script(src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/2.7.0/bundle.min.js")
+    script(src="/js/maps.js")

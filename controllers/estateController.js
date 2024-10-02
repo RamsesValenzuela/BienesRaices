@@ -1,7 +1,8 @@
 import db from '../config/db.js'
 import { validationResult } from 'express-validator'
 import {Price, Category, Estate } from '../models/index.js'
-
+import {unlink} from 'node:fs/promises'
+ 
 
 const admin = async (req, res) =>{
 
@@ -19,6 +20,7 @@ const admin = async (req, res) =>{
 
     res.render('estate/admin',{
         pagina: 'Mis Propiedades',
+        csrfToken: req.csrfToken(),
         propiedades,
 
     })
@@ -271,6 +273,31 @@ const saveUpdate = async (req, res) =>{
     
 }
 
+const deleteEstate = async (req, res) => {
+
+    const {id} = req.params
+
+    const propiedad= await Estate.findByPk(id)
+
+    if(!propiedad){
+        return res.redirect('/mis_propiedades')
+    }
+    
+    if(propiedad.UsuarioId.toString() !== req.user.id.toString()){
+        return res.redirect('/mis_propiedades')
+    }
+
+    //eliminar la imagen asociada
+    await unlink(`public/uploads/${propiedad.imagen}`)
+
+    //eliminar la propiedad
+    await propiedad.destroy()
+
+    res.redirect('/mis_propiedades')
+
+
+}
+
 export{
     admin,
     crear,
@@ -278,5 +305,6 @@ export{
     addImage,
     storageImage,
     editPropiety,
-    saveUpdate
+    saveUpdate,
+    deleteEstate
 }

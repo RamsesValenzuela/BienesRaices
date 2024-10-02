@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { body } from 'express-validator'
-import {admin, crear, saveEstate, addImage, storageImage, editPropiety, saveUpdate} from '../controllers/estateController.js'
+import {admin, crear, saveEstate, addImage, storageImage, editPropiety, saveUpdate, deleteEstate} from '../controllers/estateController.js'
 import protectPath from '../middleware/ProtectPath.js'
 import upload from '../middleware/UploadImage.js'
  
@@ -50,5 +50,9 @@ router.post('/propiedades/editar/:id',
     body('wc').isNumeric().withMessage('Selecciona el numero de baños'),
     body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
     saveUpdate)
+
+router.post('/propiedades/eliminar/:id', 
+    protectPath,    
+    deleteEstate )
 
 export default router
